@@ -32,8 +32,10 @@ function playRound() {
 
     if (humanScore > computadorScore) {
         console.log(`Parabéns, você venceu com ${humanScore} pontos!!`)
+        alert(`Parabéns, você venceu com ${humanScore} pontos!!`)
     } else {
         console.log(`À máquina te venceu com ${computadorScore} pontos..`)
+        alert(`Parabéns, você venceu com ${computadorScore} pontos!!`)
     }
 }
 
