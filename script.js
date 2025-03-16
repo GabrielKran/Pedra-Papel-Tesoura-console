@@ -1,42 +1,57 @@
-function getComputadorescolha() {
-    return Math.floor(Math.random() * 3) + 1
-
+function getComputadorEscolha() {
+    let escolhas = ["pedra", "papel", "tesoura"];
+    return escolhas[Math.floor(Math.random() * escolhas.length)];
 }
 
-function getHumanEscolha () {
-    let entrada = parseInt(prompt("Digite 1 para Pedra, 2 para Papel e 3 para Tesoura: "))
-    return entrada
-}
-
-let humanScore = 0
+let playerScore = 0
 let computadorScore = 0
 
-function playRound() {
-    for (let i = 1; i <= 5; i++) {
-        let hc = getHumanEscolha()
-        let cc = getComputadorescolha()
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        console.log(button.innerHTML);
+        playRound(button.innerHTML.toLowerCase());
+    })
+})
 
-        if (hc === 1 && cc === 3 || hc === 2 && cc === 1 || hc === 3 && cc === 2) {
-            humanScore ++
-            console.log(`Você ganhou!!\n${humanScore} x ${computadorScore}`)
-            
-        } else if (cc === 1 && hc === 3 || cc === 2 && hc === 1 || cc === 3 && hc === 2) {
-            computadorScore ++
-            console.log(`A máquina ganhou..\n${humanScore} x ${computadorScore}`)
-
-        } else if (hc === 1 && cc === 1 || hc === 2 && cc === 2 || hc === 3 && cc === 3) {
-            console.log(`Empate\n${humanScore} x ${computadorScore}`)
-
-        }
-    }
-
-    if (humanScore > computadorScore) {
-        console.log(`Parabéns, você venceu com ${humanScore} pontos!!`)
-        alert(`Parabéns, você venceu com ${humanScore} pontos!!`)
-    } else {
-        console.log(`À máquina te venceu com ${computadorScore} pontos..`)
-        alert(`Parabéns, você venceu com ${computadorScore} pontos!!`)
-    }
+function desabilitandoBotao() {
+    buttons.forEach(element => {
+        element.disabled = true;
+    })
 }
 
-playRound()
+function playRound(playerEscolha) {
+    let computadorEscolha = getComputadorEscolha();
+    let resultEmbate = "";
+    
+    if (playerEscolha === "pedra" && computadorEscolha === "tesoura" ||
+        playerEscolha === "papel" && computadorEscolha === "pedra" ||
+        playerEscolha === "tesoura" && computadorEscolha === "papel") {
+            
+            playerScore ++;
+            resultEmbate = `Você venceu! ${playerEscolha} vence ${computadorEscolha}<br><br>
+            Pontuação do jogador = ${playerScore}<br>
+            Pontuação do computador = ${computadorScore}`;
+            
+        } else if (playerEscolha === computadorEscolha) {
+            resultEmbate = `Empate! Vocês dois escolheram ${playerEscolha}<br><br>
+            Pontuação do jogador = ${playerScore}<br>
+            Pontuação do computador = ${computadorScore}`;
+            
+        } else {
+            computadorScore ++;
+            resultEmbate = `Você perdeu! ${computadorEscolha} vence ${playerEscolha}<br><br>
+            Pontuação do jogador = ${playerScore}<br>
+            Pontuação do computador = ${computadorScore}`;
+            
+        }
+        document.querySelector("#result-embate").innerHTML = resultEmbate;
+    
+    if (playerScore === 5 || computadorScore === 5) {
+        let resultFinal = playerScore === 5
+            ? `Você venceu o jogo! Recarregue a página para jogar novamente`
+            : `Você perdeu o jogo! Recarregue a página para jogar novamente`;
+            document.querySelector("#result-final").innerHTML = resultFinal;
+            desabilitandoBotao();
+    }
+}
